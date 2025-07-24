@@ -1,4 +1,3 @@
-// src/components/Home.jsx
 import { motion } from "framer-motion";
 import { Link } from "react-router-dom";
 
@@ -45,7 +44,7 @@ export default function Home() {
           transition={{ delay: 0.4 }}
         >
           <Link
-            to="/create-budget"
+            to="/dashboard"
             className="bg-emerald-500 hover:bg-emerald-600 text-white px-6 py-3 rounded-full font-semibold shadow-lg"
           >
             Get Started
@@ -122,7 +121,7 @@ export default function Home() {
           Join Budgie today and make every naira counts.
         </motion.p>
         <Link
-          to="/create-budget"
+          to="/dashboard"
           className="bg-white text-emerald-600 font-semibold px-6 py-3 rounded-full hover:bg-emerald-100 transition"
         >
           Get Started for Free
