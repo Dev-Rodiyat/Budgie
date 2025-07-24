@@ -5,6 +5,7 @@ import CreateBudgetForm from '../components/CreateBudgetForm';
 import DeleteConfirmModal from '../components/DeleteConfirmModal';
 import EditBudgetModal from '../components/EditBudgetModal';
 import { useNavigate } from 'react-router-dom';
+import { toast } from 'react-toastify';
 
 const MyBudgets = () => {
     const [budgets, setBudgets] = useState([]);
@@ -44,6 +45,8 @@ const MyBudgets = () => {
             filteredData = filteredData.filter(b => b.status === statusFilter);
         }
 
+        filteredData.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
+
         setFiltered(filteredData);
     }, [search, categoryFilter, dateFilter, statusFilter, budgets]);
 
@@ -65,28 +68,12 @@ const MyBudgets = () => {
         localStorage.setItem('budgie_budgets', JSON.stringify(updatedBudgets));
         setIsDeleteModalOpen(false);
         setSelectedBudget(null);
+        toast.success('Budget deleted successfully!')
     };
 
     const handlePrint = () => {
         window.print();
     };
-
-    const today = new Date();
-
-    const enhancedBudgets = budgets.map(b => {
-        const due = new Date(b.dueDate);
-        let status = b.status;
-
-        if (due < today) {
-            status = 'expired';
-        } else if (due.toDateString() === today.toDateString()) {
-            status = 'due today';
-        } else {
-            status = 'active';
-        }
-
-        return { ...b, status };
-    });
 
     const handleDownload = () => {
         const csv = filtered.map(b =>
@@ -107,7 +94,6 @@ const MyBudgets = () => {
     };
 
     const categories = [...new Set(budgets.map(b => b.category))];
-    const statuses = [...new Set(budgets.map(b => b.status).filter(Boolean))];
 
     return (
         <section className="min-h-screen px-6 py-12 bg-gradient-to-br from-emerald-50 to-white dark:bg-gray-900 text-gray-800 dark:text-gray-100 print:bg-white print:text-black">
@@ -121,10 +107,8 @@ const MyBudgets = () => {
                     My Budgets
                 </motion.h2>
 
-                {/* Controls */}
                 <div className="flex flex-wrap gap-4 justify-between items-center mb-6">
                     <div className="flex items-center gap-2 flex-wrap">
-                        {/* Search */}
                         <div className="relative">
                             <FiSearch className="absolute left-3 top-2.5 text-gray-400" />
                             <input
@@ -142,7 +126,6 @@ const MyBudgets = () => {
                             )}
                         </div>
 
-                        {/* Category Filter */}
                         <select
                             value={categoryFilter}
                             onChange={e => setCategoryFilter(e.target.value)}
@@ -165,7 +148,6 @@ const MyBudgets = () => {
                             <option value="expired">Expired</option>
                         </select>
 
-                        {/* Date Filter */}
                         <input
                             type="date"
                             value={dateFilter}
@@ -174,7 +156,6 @@ const MyBudgets = () => {
                         />
                     </div>
 
-                    {/* Actions */}
                     <div className="flex gap-2">
                         <button onClick={handlePrint} className="flex items-center gap-1 px-3 py-2 bg-gray-200 hover:bg-gray-300 dark:bg-gray-700 dark:hover:bg-gray-600 rounded-lg text-sm">
                             <FiPrinter /> Print
@@ -191,7 +172,6 @@ const MyBudgets = () => {
                     </div>
                 </div>
 
-                {/* View Toggle */}
                 <div className="flex justify-end mb-4 gap-2 text-sm">
                     <button
                         onClick={() => setViewMode('list')}
@@ -213,7 +193,6 @@ const MyBudgets = () => {
                     </button>
                 </div>
 
-                {/* Display Budgets */}
                 <div ref={printRef}>
                     {filtered.length === 0 ? (
                         <p className="text-center text-gray-500 dark:text-gray-400">
@@ -264,7 +243,7 @@ const MyBudgets = () => {
                                                                     ? 'bg-yellow-100 text-yellow-600'
                                                                     : 'bg-emerald-100 text-emerald-600'
                                                             }
-                                `}
+                                                        `}
                                                     >
                                                         {b?.status}
                                                     </span>
@@ -276,7 +255,7 @@ const MyBudgets = () => {
                                                             disabled={b.status === 'expired'}
                                                             className={`text-blue-500 hover:text-blue-600 transition ${b.status === 'expired' ? 'opacity-40 cursor-not-allowed' : ''}`}
                                                             onClick={(e) => {
-                                                                e.stopPropagation(); // Prevents row-level click events
+                                                                e.stopPropagation();
                                                                 if (b.status !== 'expired') {
                                                                     setSelectedBudget(b);
                                                                     setIsEditOpen(true);
@@ -289,7 +268,7 @@ const MyBudgets = () => {
                                                         <button
                                                             title="Delete"
                                                             onClick={(e) => {
-                                                                e.stopPropagation(); // Prevents row-level click events
+                                                                e.stopPropagation();
                                                                 setSelectedBudget(b);
                                                                 setIsDeleteModalOpen(true);
                                                             }}
@@ -321,7 +300,7 @@ const MyBudgets = () => {
                                                 <button
                                                     title="Edit"
                                                     onClick={(e) => {
-                                                        e.stopPropagation(); // Prevent row click or parent events
+                                                        e.stopPropagation();
                                                         setSelectedBudget(b);
                                                         setIsEditOpen(true);
                                                     }}
@@ -332,7 +311,7 @@ const MyBudgets = () => {
                                                 <button
                                                     title="Delete"
                                                     onClick={(e) => {
-                                                        e.stopPropagation(); // Prevent row click or parent events
+                                                        e.stopPropagation();
                                                         setSelectedBudget(b);
                                                         setIsDeleteModalOpen(true);
                                                     }}

@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
-import { motion } from 'framer-motion';
 import CreateBudgetForm from '../components/CreateBudgetForm';
 import { FaArrowsRotate } from 'react-icons/fa6';
+import { AnimatePresence, motion } from 'framer-motion';
 
 const tips = [
     "Track every naira you spend - awareness is power.",
@@ -75,9 +75,27 @@ const Dashboard = () => {
 
                 <div className="bg-emerald-50 rounded-xl p-6 shadow border">
                     <h2 className="text-lg font-semibold mb-3">💡 Budgeting Tip of the Day</h2>
-                    <div className='flex justify-between w-full'>
-                        <p className="text-sm italic text-gray-700">"{tips[tipIndex]}"</p>
-                        <button onClick={handleNextTip} className="mt-2 text-emerald-600 text-sm">
+                    <div className="flex justify-between items-start w-full gap-2">
+                        <div className="flex-1 min-h-[2.5rem]">
+                            <AnimatePresence mode="wait">
+                                <motion.p
+                                    key={tipIndex}
+                                    initial={{ opacity: 0, y: 10 }}
+                                    animate={{ opacity: 1, y: 0 }}
+                                    exit={{ opacity: 0, y: -10 }}
+                                    transition={{ duration: 0.3 }}
+                                    className="text-sm italic text-gray-700"
+                                >
+                                    "{tips[tipIndex]}"
+                                </motion.p>
+                            </AnimatePresence>
+                        </div>
+
+                        <button
+                            onClick={handleNextTip}
+                            className="text-emerald-600 text-sm hover:rotate-180 transition-transform duration-300"
+                            aria-label="Next Tip"
+                        >
                             <FaArrowsRotate />
                         </button>
                     </div>
@@ -102,7 +120,7 @@ const Dashboard = () => {
                                         <th className="px-4 py-3">Spent</th>
                                         <th className="px-4 py-3">Remaining</th>
                                         <th className="px-4 py-3">Due</th>
-                                        <th className="px-4 py-3">Status</th> {/* ✅ New column */}
+                                        <th className="px-4 py-3">Status</th>
                                     </tr>
                                 </thead>
                                 <tbody className="divide-y divide-emerald-100">

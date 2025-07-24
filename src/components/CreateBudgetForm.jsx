@@ -10,7 +10,8 @@ const CreateBudgetForm = ({ onClose, onSuccess }) => {
         amount: '',
         category: '',
         dueDate: '',
-        notes: '', // ✅ Add notes field
+        notes: '',
+        createdAt: new Date().toISOString()
     });
 
     const [loading, setLoading] = useState(false);
@@ -115,9 +116,9 @@ const CreateBudgetForm = ({ onClose, onSuccess }) => {
                         name="dueDate"
                         value={formData.dueDate}
                         onChange={handleChange}
+                        min={new Date().toISOString().split("T")[0]}
                         className="w-full border dark:border-gray-600 px-3 py-2 rounded-lg bg-transparent focus:outline-none"
                     />
-
                     <div className="relative">
                         <textarea
                             name="notes"

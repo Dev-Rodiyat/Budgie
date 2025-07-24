@@ -140,6 +140,7 @@ const EditBudgetModal = ({ isOpen, onClose, budget, onUpdate }) => {
             name="dueDate"
             value={formData.dueDate}
             onChange={handleChange}
+            min={new Date().toISOString().split("T")[0]}
             className="w-full border dark:border-gray-600 px-3 py-2 rounded-lg bg-transparent focus:outline-none"
           />
 
